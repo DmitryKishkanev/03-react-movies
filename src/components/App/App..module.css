@@ -9,3 +9,7 @@
 //   flex-direction: column;
 //   gap: 32px;
 // `; */
+
+.app {
+  padding: 0 16px;
+}
