@@ -5,7 +5,8 @@
       "@/*": ["./*"],
       "components/*": ["components/*"],
       "utils/*": ["utils/*"],
-      "types": ["node"]
+      "types/*": ["types/*"],
+      "services/*": ["services/*"]
     },
 
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",

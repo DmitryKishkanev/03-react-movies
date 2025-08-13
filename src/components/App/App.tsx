@@ -1,48 +1,50 @@
 import { useState } from 'react';
+import SearchBar from 'components/SearchBar/SearchBar';
+import MovieGrid from 'components/MovieGrid/MovieGrid';
+import fetchMovies from 'services/movieService';
+import type { Movie } from 'types/movie';
+import { Toaster, toast } from 'react-hot-toast';
+// import css from 'components/App/App..module.css';
 
 export default function App() {
-  // const [votes, setVotes] = useState<Votes>({
-  //   good: 0,
-  //   neutral: 0,
-  //   bad: 0,
-  // });
-  // const handleVote = (type: VoteType) => {
-  //   setVotes(prevVotes => ({
-  //     ...prevVotes,
-  //     [type]: prevVotes[type] + 1,
-  //   }));
-  // };
-  // const resetVotes = () => {
-  //   setVotes({
-  //     good: 0,
-  //     neutral: 0,
-  //     bad: 0,
-  //   });
-  // };
-  // const varTotalVotes = votes.good + votes.neutral + votes.bad;
-  // const varPositiveRate = varTotalVotes
-  //   ? Math.round((votes.good / varTotalVotes) * 100)
-  //   : 0;
-  // return (
-  //   <Container>
-  //     <CafeInfo
-  //       title="Sip Happens Café"
-  //       description=" Please rate our service by selecting one of the options below."
-  //     />
-  //     <VoteOptions
-  //       onVote={handleVote}
-  //       onReset={resetVotes}
-  //       canReset={!!varTotalVotes}
-  //     />
-  //     {varTotalVotes ? (
-  //       <VoteStats
-  //         votes={votes}
-  //         totalVotes={varTotalVotes}
-  //         positiveRate={varPositiveRate}
-  //       />
-  //     ) : (
-  //       <Notification />
-  //     )}
-  //   </Container>
-  // );
+  const [movies, setMovies] = useState<Movie[]>([]);
+
+  const handleSearch = async (query: string) => {
+    try {
+      const data = await fetchMovies({ query: query });
+
+      if (data.movies.length === 0) {
+        toast('No movies found for your request.', {
+          style: {
+            background: '#a20e0e',
+            color: '#fff',
+          },
+        });
+      }
+
+      setMovies(data.movies);
+    } catch {
+      setMovies([]);
+      toast('No movies found for your request.', {
+        style: {
+          background: '#a20e0e',
+          color: '#fff',
+        },
+      });
+    }
+  };
+
+  const handleSelect = (movie: Movie) => {
+    console.log('Выбран фильм:', movie.title);
+  };
+
+  return (
+    <>
+      <SearchBar onSubmit={handleSearch} />
+      {movies.length > 0 && (
+        <MovieGrid movies={movies} onSelect={handleSelect} />
+      )}
+      <Toaster position="top-center" reverseOrder={false} />;
+    </>
+  );
 }
