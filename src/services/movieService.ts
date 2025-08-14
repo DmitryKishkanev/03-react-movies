@@ -50,11 +50,6 @@ export default async function fetchMovies(
     };
   } catch (error) {
     console.error('Ошибка при получении фильмов:', error);
-    return {
-      movies: [],
-      page: 0,
-      total_pages: 0,
-      total_results: 0,
-    };
+    throw error;
   }
 }
